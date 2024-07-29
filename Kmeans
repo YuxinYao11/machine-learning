@@ -1,0 +1,43 @@
+import pandas as pd
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("",encoding = "gbk")
+
+## 利用sse 选择k
+sse = []
+for k in range(1,9):
+estimator = KMeans(n_cluster = k) ## 构造聚类器
+estimator.fit(df[["r","f","m"]])
+sse.append(estimator.inertia_) # estimator.inertia_ 获取聚类准则的总和 样本到其最近聚类中心的平方距离总和
+x = range(1,9)
+
+plt.xlabel("k")
+plt.ylabel("sse")
+plt.plot(x,sse,"o-")
+plt.show()
+
+
+### elbow method ###
+
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+
+# 生成示例数据
+X, _ = make_blobs(n_samples=300, centers=4, random_state=42, cluster_std=0.60)
+
+wcss = []
+
+# 计算不同簇数的WCSS
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, init='k-means++', max_iter=300, n_init=10, random_state=42)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+
+# 绘制肘部法则图
+plt.plot(range(1, 11), wcss)
+plt.title('Elbow Method')
+plt.xlabel('Number of Clusters')
+plt.ylabel('WCSS')
+plt.show()
